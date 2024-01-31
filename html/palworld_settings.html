@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Palworld Game Settings</title>
+</head>
+<body>
+  <h1>Palworld Game Settings</h1>
+  <form>
+    <textarea rows="10" cols="80" id="configText" placeholder="请输入游戏配置内容">; This configuration file is a sample of the default server settings.
+; Changes to this file will NOT be reflected on the server.
+; To change the server settings, modify Pal/Saved/Config/WindowsServer/PalWorldSettings.ini.
+[/Script/Pal.PalGameWorldSettings]
+OptionSettings=(Difficulty=None,DayTimeSpeedRate=1.000000,NightTimeSpeedRate=1.000000,ExpRate=1.000000,PalCaptureRate=1.000000,PalSpawnNumRate=1.000000,PalDamageRateAttack=1.000000,PalDamageRateDefense=1.000000,PlayerDamageRateAttack=1.000000,PlayerDamageRateDefense=1.000000,PlayerStomachDecreaceRate=1.000000,PlayerStaminaDecreaceRate=1.000000,PlayerAutoHPRegeneRate=1.000000,PlayerAutoHpRegeneRateInSleep=1.000000,PalStomachDecreaceRate=1.000000,PalStaminaDecreaceRate=1.000000,PalAutoHPRegeneRate=1.000000,PalAutoHpRegeneRateInSleep=1.000000,BuildObjectDamageRate=1.000000,BuildObjectDeteriorationDamageRate=1.000000,CollectionDropRate=1.000000,CollectionObjectHpRate=1.000000,CollectionObjectRespawnSpeedRate=1.000000,EnemyDropItemRate=1.000000,DeathPenalty=All,bEnablePlayerToPlayerDamage=False,bEnableFriendlyFire=False,bEnableInvaderEnemy=True,bActiveUNKO=False,bEnableAimAssistPad=True,bEnableAimAssistKeyboard=False,DropItemMaxNum=3000,DropItemMaxNum_UNKO=100,BaseCampMaxNum=128,BaseCampWorkerMaxNum=15,DropItemAliveMaxHours=1.000000,bAutoResetGuildNoOnlinePlayers=False,AutoResetGuildTimeNoOnlinePlayers=72.000000,GuildPlayerMaxNum=20,PalEggDefaultHatchingTime=72.000000,WorkSpeedRate=1.000000,bIsMultiplay=False,bIsPvP=False,bCanPickupOtherGuildDeathPenaltyDrop=False,bEnableNonLoginPenalty=True,bEnableFastTravel=True,bIsStartLocationSelectByMap=True,bExistPlayerAfterLogout=False,bEnableDefenseOtherGuildPlayer=False,CoopPlayerMaxNum=4,ServerPlayerMaxNum=32,ServerName="Default Palworld Server",ServerDescription="",AdminPassword="",ServerPassword="",PublicPort=8211,PublicIP="",RCONEnabled=False,RCONPort=25575,Region="",bUseAuth=True,BanListURL="https://api.palworldgame.com/api/banlist.txt")
+</textarea><br><br>
+    <input type="button" value="解析配置" onclick="parseConfig()">
+  </form>
+
+  <h2>解析后的配置项：</h2>
+  <div id="configItems"></div>
+
+<script>
+function parseConfig() {
+	event.preventDefault(); // 阻止表单的默认提交行为
+	var configText = document.getElementById("configText").value;
+	var lines = configText.split('\n');
+	var configStart = false;
+	var configItems = [];
+
+	for (var i = 0; i < lines.length; i++) {
+		var line = lines[i].trim();
+		if (line.startsWith(";") || line === "") {
+			continue; // 忽略注释行和空行
+		}
+		if (!configStart) {
+			if (line !== "[/Script/Pal.PalGameWorldSettings]") {
+				alert("不支持的配置格式");
+				return;
+			}
+			configStart = true;
+		} else {
+			const startIndex = line.indexOf('(') + 1; // 获取左括号的索引位置
+			const endIndex = line.lastIndexOf(')'); // 获取右括号的索引位置
+
+			if (startIndex >= 0 && endIndex >= 0 && endIndex > startIndex) {
+				const content = line.substring(startIndex, endIndex);
+				var options = content.split(",");
+				for (var j = 0; j < options.length; j++) {
+					const option = options[j];
+					const keyValue = option.split("=");
+					if (keyValue.length === 2) {
+						var key = keyValue[0].trim();
+						var value = keyValue[1].trim();
+						configItems.push({ key: key, value: value });
+					}
+				}
+			} else {
+				console.log('未找到括号内的内容');
+			}
+		}
+	}
+
+	displayConfigItems(configItems);
+}
+
+function renderWithoutMeta(configItem, row) {
+	const keyCell = document.createElement('td');
+	keyCell.textContent = configItem.key;
+	row.appendChild(keyCell);
+
+	const valueCell = document.createElement('td');
+
+	var input = document.createElement("input");
+	var valueLabel;
+
+	if (isNaN(configItem.value)) {
+		if (configItem.value == "True" || configItem.value == "False") {
+			input.type = "checkbox";
+			input.checkd = (configItem.value == "True");
+		} else {
+			input.type = "text";
+			input.value = configItem.value;
+		}
+	} else {
+		input.type = "range";
+		input.min = "0.1";
+		input.max = configItem.value * 2;
+		input.step = "0.1";
+		input.value = configItem.value;
+		input.oninput = function() {
+			updateConfigValue(input);
+		};
+
+		valueLabel = document.createElement("label");
+		valueLabel.innerHTML = configItem.value;
+	}
+
+	valueCell.appendChild(input);
+	if (valueLabel) {
+		valueCell.appendChild(valueLabel);
+	}
+	row.appendChild(valueCell);
+}
+
+function renderWithMeta(configItem ,meta, row) {
+	const keyCell = document.createElement('td');
+	keyCell.textContent = meta.name;
+	row.appendChild(keyCell);
+
+	const valueCell = document.createElement('td');
+
+	// var label = document.createElement("label");
+	// label.innerHTML = meta.name + ": ";
+	// parent.appendChild(label);
+
+	var input, select, valueLabel;
+
+	switch (meta.type) {
+		case "range":
+			input = document.createElement("input");
+			input.type = meta.type;
+			input.min = meta.min;
+			input.max = meta.max;
+			input.step = meta.step;
+			input.value = configItem.value;
+			input.oninput = function() {
+				updateConfigValue(input);
+			};
+			valueLabel = document.createElement("label");
+			valueLabel.innerHTML = configItem.value;
+			break;
+		case "select":
+			select = document.createElement('select');
+			const optionValues = meta.min.split(";");
+			const optionTexts = meta.max.split(";");
+			for (let i = 0; i < optionValues.length; i++) {
+				const option = document.createElement('option');
+				option.value = optionValues[i];
+				option.text = optionTexts[i];
+				select.appendChild(option);
+			}
+			break;
+		case "bool":
+			input = document.createElement("input");
+			input.type = "checkbox";
+			input.checkd = (configItem.value == "True");
+			break;
+		case "string":
+			input = document.createElement("input");
+			input.type = "text";
+			input.value = trimString(configItem.value, '"');
+			break;
+		default:
+			console.log("Unsupported setting type! " + meta);
+	}
+	if (input) {
+		valueCell.appendChild(input);
+	}
+	if (select) {
+		valueCell.appendChild(select);
+	}
+	if (valueLabel) {
+		valueCell.appendChild(valueLabel);
+	}
+	row.appendChild(valueCell);
+}
+
+function trimString(str, char) {
+	if (str.startsWith(char) && str.endsWith(char)) {
+		return str.slice(1, -1);
+	}
+	return str;
+}
+
+function renderSetting(configItem, metaMap, table) {
+	const row = document.createElement('tr');
+	const meta = metaMap.get(configItem.key);
+	if (meta == null) {
+		renderWithoutMeta(configItem, row);
+	} else {
+		renderWithMeta(configItem ,meta, row);
+	}
+	// parent.appendChild(document.createElement("br"));
+	table.appendChild(row);
+}
+
+function displayConfigItems(configItems) {
+	const metaMap = getMetaMap();
+
+	var configItemsDiv = document.getElementById("configItems");
+	configItemsDiv.innerHTML = "";
+
+	const table = document.createElement('table');
+	for (var i = 0; i < configItems.length; i++) {
+		renderSetting(configItems[i], metaMap, table);
+	}
+	configItemsDiv.appendChild(table);
+}
+
+function updateConfigValue(input) {
+	var valueLabel = input.nextElementSibling;
+	valueLabel.innerHTML = input.value;
+}
+
+const _settingsMeta =`key,name,desc,type,min,max,step,default,server_only
+DayTimeSpeedRate,白天流逝速度,,range,0.1,5,0.1,1,0
+NightTimeSpeedRate,夜晚流逝速度,,range,0.1,5,0.1,1,0
+ExpRate,经验值倍率,,range,0.1,20,0.1,1,0
+PalCaptureRate,捕获概率倍率,,range,0.5,2,0.1,1,0
+PalSpawnNumRate,帕鲁出现数量倍率,提高帕鲁出现数量将导致游戏性能下降,range,0.5,3,0.1,1,0
+PalDamageRateAttack,帕鲁攻击伤害倍率,,range,0.1,5,0.1,1,0
+PalDamageRateDefense,帕鲁承受伤害倍率,,range,0.1,5,0.1,1,0
+PlayerDamageRateAttack,玩家攻击伤害倍率,,range,0.1,5,0.1,1,0
+PlayerDamageRateDefense,玩家承受伤害倍率,,range,0.1,5,0.1,1,0
+PlayerStomachDecreaceRate,玩家饱食度降低倍率,,range,0.1,5,0.1,1,0
+PlayerStaminaDecreaceRate,玩家耐力降低倍率,,range,0.1,5,0.1,1,0
+PlayerAutoHPRegeneRate,玩家生命值自然回复倍率,,range,0.1,5,0.1,1,0
+PlayerAutoHpRegeneRateInSleep,玩家睡眠时生命值回复倍率,,range,0.1,5,0.1,1,0
+PalStomachDecreaceRate,帕鲁饱食度降低倍率,,range,0.1,5,0.1,1,0
+PalStaminaDecreaceRate,帕鲁耐力降低倍率,,range,0.1,5,0.1,1,0
+PalAutoHPRegeneRate,帕鲁生命值自然回复倍率,,range,0.1,5,0.1,1,0
+PalAutoHpRegeneRateInSleep,帕鲁睡眠时生命值回复倍率,帕鲁终端中的生命值回复倍率,range,0.1,5,0.1,1,0
+BuildObjectDamageRate,对建筑伤害倍率,,range,0.5,3,0.1,1,0
+BuildObjectDeteriorationDamageRate,建筑特的劣化速度倍率,,range,0,10,0.1,1,0
+CollectionDropRate,可采集物品采集量倍率,,range,0.5,3,0.1,1,0
+CollectionObjectHpRate,可采集物品生命值倍率,,range,0.5,3,0.1,1,0
+CollectionObjectRespawnSpeedRate,可采集物品刷新间隔,,range,0.5,3,0.1,1,0
+EnemyDropItemRate,道具掉落量倍率,,range,0.5,3,0.1,1,0
+DeathPenalty,死亡惩罚,,select,None;Item;ItemAndEquipment;All,不掉落任何东西;掉落装备以外的道具;掉落所有道具;掉落所有道具及队伍内的帕鲁,,All,0
+bEnablePlayerToPlayerDamage,允许玩家对玩家造成伤害,,bool,,,,FALSE,1
+bEnableFriendlyFire,允许对友方单位造成伤害,比如可以攻击在基地工作的帕鲁,bool,,,,FALSE,1
+bEnableInvaderEnemy,是否会发生袭击事件,,bool,,,,TRUE,0
+bActiveUNKO,是否打开夜间仿制品(UNKO)功能?,不确定UNKO是什么,bool,,,,FALSE,1
+bEnableAimAssistPad,启用手柄瞄准辅助,,bool,,,,TRUE,1
+bEnableAimAssistKeyboard,启用键盘瞄准辅助,,bool,,,,FALSE,1
+DropItemMaxNum,世界内的掉落物上限,,range,0,5000,1,3000,0
+DropItemMaxNum_UNKO,世界内的夜间仿制品(UNKO)掉落物上限,,range,0,500,1,100,1
+BaseCampMaxNum,据点数量上限,,range,1,500,1,128,1
+BaseCampWorkerMaxNum,可分派至据点工作的帕鲁数量上限,,range,1,20,1,15,0
+DropItemAliveMaxHours,掉落物品存活时间（小时）,,range,1,10,1,1,1
+bAutoResetGuildNoOnlinePlayers,无在线玩家时是否自动重置公会,,bool,,,,FALSE,1
+AutoResetGuildTimeNoOnlinePlayers,无在线玩家多少小时后自动重置公会,,range,1,300,1,72,1
+GuildPlayerMaxNum,公会人数上限,,range,1,100,1,20,0
+PalEggDefaultHatchingTime,帕鲁蛋孵化所需时间（小时）,,range,0,240,1,72,0
+WorkSpeedRate,工作速度倍率,,range,0.1,5,0.1,1,1
+bIsMultiplay,是否是多人游戏,,bool,,,,FALSE,0
+bIsPvP,是否开启PVP模式,,bool,,,,FALSE,1
+bCanPickupOtherGuildDeathPenaltyDrop,是否可以拾取其他公会成员的死亡掉落,,bool,,,,FALSE,1
+bEnableNonLoginPenalty,是否开启离线惩罚,如果开启下线后饥饿度会随着时间的流逝而增加，就像在线时一样。,bool,,,,TRUE,1
+bEnableFastTravel,是否开启传送功能,,bool,,,,TRUE,1
+bIsStartLocationSelectByMap,启用地图上起始位置选择,,bool,,,,TRUE,1
+bExistPlayerAfterLogout,玩家下线后是否仍存在于游戏中,,bool,,,,FALSE,1
+bEnableDefenseOtherGuildPlayer,启用公会玩家互相防御?,可能是：允许公会玩家互相防御：这个选项启用时，公会成员可以相互进行防御，保护彼此免受其他公会或敌对玩家的攻击。这可能涉及公会内部的团队合作和互助，使公会成员能够共同面对敌对势力。,bool,,,,FALSE,1
+CoopPlayerMaxNum,主机模式玩家数量上限,,range,1,32,1,4,1
+ServerPlayerMaxNum,专用服务器玩家数量上限,,range,1,32,1,32,1
+ServerName,服务器名字,,string,,,,Default Palworld Server,1
+ServerDescription,服务器描述,,string,,,,,1
+AdminPassword,管理员密码,,string,,,,,1
+ServerPassword,服务器密码,,string,,,,,1
+PublicPort,端口,,range,1024,49151,1,8211,1
+PublicIP,IP地址,,string,,,,,1
+RCONEnabled,启用远程控制台,启用或禁用远程控制台 (RCON) 以进行服务器管理。RCON = Remote Console,bool,,,,FALSE,1
+RCONPort,远程控制台端口,,range,1024,49151,1,25575,1
+Region,服务器所在区域,,string,,,,,1
+bUseAuth,是否使用身份验证,,bool,,,,TRUE,1
+BanListURL,封禁名单URL,,string,,,,https://api.palworldgame.com/api/banlist.txt,1`;
+
+function getMetaMap() {
+	const rows = parseCSV(_settingsMeta);
+	return new Map(rows.map(obj => [obj.key, obj]));
+}
+
+function parseCSV(csvString) {
+	const rows = csvString.split('\n');// 使用换行符将字符串拆分成行
+	const header = rows[0].split(',');// 解析表头
+
+	// 解析数据行
+	const data = [];
+	for (let i = 1; i < rows.length; i++) {
+		if (rows[i].trim() === '')
+			continue;// 忽略空行
+		const row = rows[i].split(',');
+		data.push(row);
+	}
+
+	// 构建结果对象
+	const result = [];
+	for (let i = 0; i < data.length; i++) {
+		const obj = {};
+		for (let j = 0; j < header.length; j++) {
+		obj[header[j]] = data[i][j];
+		}
+		result.push(obj);
+	}
+
+	return result;
+}
+
+</script>
+</body>
+</html>
