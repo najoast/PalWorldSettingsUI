@@ -8,7 +8,7 @@ The main function:
 * Real-time preview: PalWorldSettingsUI provides a real-time preview function, allowing players to immediately see the effects when modifying configurations, thereby better adjusting game settings.
 * Open Source Project: PalWorldSettingsUI is an open source project and the code is available on GitHub. This means players are free to use, modify and contribute code to suit personal needs and improve tool functionality.
 
-With the PalWorldSettingsUI, players can easily customize the configuration of their Palworld games to suit their personal preferences and gaming needs. Whether adjusting graphics settings, audio options, or gameplay settings, PalWorldSettingsUI provides a convenient and intuitive way to make changes.
+With the PalWorldSettingsUI, players can easily customize the configuration of their Palworld games to suit their personal preferences and gaming needs. No matter which option you are adjusting, PalWorldSettingsUI provides a convenient and intuitive way to make changes.
 
 Through the open source project of PalWorldSettingsUI, we hope to provide Palworld gamers with a powerful tool that allows them to better personalize and optimize their gaming experience. Welcome to join our project, contribute and improve this tool, and make it more complete and applicable.
 
@@ -22,6 +22,6 @@ PalWorldSettingsUI 是一个开源的网页工具，旨在帮助 Palworld 游戏
 * 实时预览：PalWorldSettingsUI 提供实时预览功能，使玩家能够在修改配置时立即看到效果，从而更好地调整游戏设置。
 * 开源项目：PalWorldSettingsUI 是一个开源项目，代码可在 GitHub 上获取。这意味着玩家可以自由使用、修改和贡献代码，以满足个人需求和改进工具功能。
 
-通过 PalWorldSettingsUI，玩家可以轻松地自定义 Palworld 游戏的配置，使其符合个人喜好和游戏需求。无论是调整图形设置、音频选项还是游戏玩法设置，PalWorldSettingsUI 都能提供一个便捷而直观的方式来进行修改。
+通过 PalWorldSettingsUI，玩家可以轻松地自定义 Palworld 游戏的配置，使其符合个人喜好和游戏需求。无论是调整哪个选项，PalWorldSettingsUI 都能提供一个便捷而直观的方式来进行修改。
 
 我们希望通过 PalWorldSettingsUI 的开源项目，为 Palworld 游戏玩家提供一个强大的工具，使他们能够更好地个性化和优化游戏体验。欢迎加入我们的项目，一起贡献和改进这个工具，让它变得更加完善和适用。
