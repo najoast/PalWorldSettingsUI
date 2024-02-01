@@ -70,55 +70,54 @@ input[type="range"] {
 
 /* table */
 table {
-  border-collapse: collapse;
+	border-collapse: collapse;
 	font-family: Simhei, Arial, sans-serif;
 }
 
 table td,
 table th {
-  padding: 10px;
-  color: white;
-  /* text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black; */
+	padding: 10px;
+	color: white;
 }
 
 table tr {
-  background-color: rgba(0, 0, 0, 0.6);
-  margin-bottom: 2px;
+	background-color: rgba(0, 0, 0, 0.6);
+	margin-bottom: 2px;
 }
 
 table tr:hover {
-  background-color: rgba(19, 196, 241, 0.5);
+	background-color: rgba(19, 196, 241, 0.5);
 }
 
 table tr:hover td,
 table tr:hover th {
-  position: relative;
+	position: relative;
 }
 
 table tr:hover td::before,
 table tr:hover th::before {
-  content: "";
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border: 2px solid rgba(19, 196, 241, 0.8);
-  z-index: -1;
-  animation: glow 1s infinite alternate;
+	content: "";
+	position: absolute;
+	top: -2px;
+	left: -2px;
+	right: -2px;
+	bottom: -2px;
+	border: 2px solid rgba(19, 196, 241, 0.8);
+	z-index: -1;
+	animation: glow 1s infinite alternate;
 }
 
 @keyframes glow {
-  0% {
-    box-shadow: 0 0 5px rgba(19, 196, 241, 0.8);
-  }
-  100% {
-    box-shadow: 0 0 20px rgba(19, 196, 241, 0.8);
-  }
+	0% {
+		box-shadow: 0 0 5px rgba(19, 196, 241, 0.8);
+	}
+	100% {
+		box-shadow: 0 0 20px rgba(19, 196, 241, 0.8);
+	}
 }
 
 td:nth-child(2) {
-  text-align: center;
+	text-align: center;
 }
 
 #configText {

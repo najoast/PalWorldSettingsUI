@@ -1,4 +1,5 @@
 const _settingsMeta =`key,name,desc,type,min,max,step,default,server_only
+Difficulty,难度,,select,Casual;Normal;Hard;None,休闲;普通;困难;自定义,,,0
 DayTimeSpeedRate,白天流逝速度,,range,0.1,5,0.1,1,0
 NightTimeSpeedRate,夜晚流逝速度,,range,0.1,5,0.1,1,0
 ExpRate,经验值倍率,,range,0.1,20,0.1,1,0

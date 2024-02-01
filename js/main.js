@@ -1,6 +1,5 @@
 
 function parseConfig() {
-	event.preventDefault(); // 阻止表单的默认提交行为
 	var configText = document.getElementById("configText").value;
 	var lines = configText.split('\n');
 	var configStart = false;
@@ -9,17 +8,17 @@ function parseConfig() {
 	for (var i = 0; i < lines.length; i++) {
 		var line = lines[i].trim();
 		if (line.startsWith(";") || line === "") {
-			continue; // 忽略注释行和空行
+			continue; // Ignore comment lines and blank lines
 		}
 		if (!configStart) {
 			if (line !== "[/Script/Pal.PalGameWorldSettings]") {
-				alert("不支持的配置格式");
+				alert("Unsupported configuration format");
 				return;
 			}
 			configStart = true;
 		} else {
-			const startIndex = line.indexOf('(') + 1; // 获取左括号的索引位置
-			const endIndex = line.lastIndexOf(')'); // 获取右括号的索引位置
+			const startIndex = line.indexOf('(') + 1; // Get the index position of the left parenthesis
+			const endIndex = line.lastIndexOf(')'); // Get the index position of the right parenthesis
 
 			if (startIndex >= 0 && endIndex >= 0 && endIndex > startIndex) {
 				const content = line.substring(startIndex, endIndex);
@@ -34,7 +33,7 @@ function parseConfig() {
 					}
 				}
 			} else {
-				console.log('未找到括号内的内容');
+				console.log('No content found in parentheses');
 			}
 		}
 	}
@@ -91,6 +90,7 @@ function renderWithoutMeta(configItem, row) {
 function renderWithMeta(configItem ,meta, row) {
 	const keyCell = document.createElement('td');
 	keyCell.textContent = meta.name;
+	keyCell.dataset.key = configItem.key;
 	row.appendChild(keyCell);
 
 	const labelCell = document.createElement('td');
@@ -112,6 +112,7 @@ function renderWithMeta(configItem ,meta, row) {
 			valueLabel.innerHTML = formatFloatValue(configItem.value);
 			input.oninput = function() {
 				updateConfigValue(input, valueLabel);
+				updateConfigText();
 			};
 			break;
 		case "select":
@@ -177,4 +178,23 @@ function displayConfigItems(configItems) {
 
 function updateConfigValue(input, valueLabel) {
 	valueLabel.innerHTML = input.value;
+}
+
+// 遍历configItems里的Table，把结果以相同的格式写回configText里
+function updateConfigText() {
+	var configText = document.getElementById("configText").value;
+	var configItems = [];
+
+	var configItemsDiv = document.getElementById("configItems");
+	var table = configItemsDiv.getElementsByTagName("table")[0];
+	var rows = table.rows;
+	for (var i = 0; i < rows.length; i++) {
+		var key = rows[i].cells[0].dataset.key;
+		var value = rows[i].cells[2].children[0].value;
+		configItems.push(key + "=" + value);
+	}
+
+	var result = "[/Script/Pal.PalGameWorldSettings]\n" + configItems.join(",") + "\n";
+	console.log(result);
+	document.getElementById("configText").value = result;
 }

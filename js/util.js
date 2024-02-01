@@ -1,18 +1,18 @@
 
 function parseCSV(csvString) {
-	const rows = csvString.split('\n');// 使用换行符将字符串拆分成行
-	const header = rows[0].split(',');// 解析表头
+	const rows = csvString.split('\n'); // split the string into rows using the line feed character
+	const header = rows[0].split(','); // parse the header
 
-	// 解析数据行
+	// parse the data rows
 	const data = [];
 	for (let i = 1; i < rows.length; i++) {
 		if (rows[i].trim() === '')
-			continue;// 忽略空行
+			continue; // ignore empty lines
 		const row = rows[i].split(',');
 		data.push(row);
 	}
 
-	// 构建结果对象
+	// build the result object
 	const result = [];
 	for (let i = 0; i < data.length; i++) {
 		const obj = {};
