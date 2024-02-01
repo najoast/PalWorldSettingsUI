@@ -124,18 +124,24 @@ function renderWithMeta(configItem ,meta, row) {
 				option.value = optionValues[i];
 				option.text = optionTexts[i];
 				select.appendChild(option);
+				if (optionValues[i] == configItem.value) {
+					select.selectedIndex = i;
+				}
 			}
+			select.onchange = updateConfigText;
 			break;
 		case "bool":
 			input = document.createElement("input");
 			input.type = "checkbox";
 			input.checkd = (configItem.value == "True");
+			input.onchange = updateConfigText;
 			break;
 		case "string":
 			input = document.createElement("input");
 			input.type = "text";
 			input.style.width = "280px";
 			input.value = trimString(configItem.value, '"');
+			input.onchange = updateConfigText;
 			break;
 		default:
 			console.log("Unsupported setting type! " + meta);
@@ -180,7 +186,7 @@ function updateConfigValue(input, valueLabel) {
 	valueLabel.innerHTML = input.value;
 }
 
-// 遍历configItems里的Table，把结果以相同的格式写回configText里
+// Traverse the <table> in <configItems> and write the results back to <configText> in the same format
 function updateConfigText() {
 	var configText = document.getElementById("configText").value;
 	var configItems = [];
@@ -191,10 +197,21 @@ function updateConfigText() {
 	for (var i = 0; i < rows.length; i++) {
 		var key = rows[i].cells[0].dataset.key;
 		var value = rows[i].cells[2].children[0].value;
-		configItems.push(key + "=" + value);
+		configItems.push(key + "=" + adjustWritebackValue(value));
 	}
 
-	var result = "[/Script/Pal.PalGameWorldSettings]\n" + configItems.join(",") + "\n";
+	var result = "[/Script/Pal.PalGameWorldSettings]\nOptionSettings=(" + configItems.join(",") + ")\n";
 	console.log(result);
 	document.getElementById("configText").value = result;
+}
+
+function adjustWritebackValue(value) {
+	switch (value) {
+		case 'on':
+			return 'True';
+		case 'off':
+			return 'False';
+		default:
+				return value;
+	}
 }
