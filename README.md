@@ -1,4 +1,7 @@
 # PalWorldSettingsUI
+
+![preview](https://github.com/najoast/PalWorldSettingsUI/assets/14048531/96969980-324c-4452-8890-ffc20a87e5b7)
+
 PalWorldSettingsUI is an open source web tool designed to help Palworld gamers visually modify game configuration settings. This tool is able to parse all configuration items in the PalWorldSettings.ini file and generate the corresponding user interface (UI), allowing players to intuitively modify various settings of the game.
 
 The main function:
