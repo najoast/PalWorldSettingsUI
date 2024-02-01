@@ -170,14 +170,12 @@ function renderSetting(configItem, metaMap, table) {
 }
 
 function displayConfigItems(configItems) {
-	const metaMap = getMetaMap();
-
 	var configItemsDiv = document.getElementById("configItems");
 	configItemsDiv.innerHTML = "";
 
 	const table = document.createElement('table');
 	for (var i = 0; i < configItems.length; i++) {
-		renderSetting(configItems[i], metaMap, table);
+		renderSetting(configItems[i], _metaMap, table);
 	}
 	configItemsDiv.appendChild(table);
 }
@@ -188,7 +186,6 @@ function updateConfigValue(input, valueLabel) {
 
 // Traverse the <table> in <configItems> and write the results back to <configText> in the same format
 function updateConfigText() {
-	var configText = document.getElementById("configText").value;
 	var configItems = [];
 
 	var configItemsDiv = document.getElementById("configItems");
@@ -197,20 +194,20 @@ function updateConfigText() {
 	for (var i = 0; i < rows.length; i++) {
 		var key = rows[i].cells[0].dataset.key;
 		var value = rows[i].cells[2].children[0].value;
-		configItems.push(key + "=" + adjustWritebackValue(value));
+		const meta = _metaMap.get(key);
+		configItems.push(key + "=" + adjustWritebackValue(meta, value));
 	}
 
 	var result = "[/Script/Pal.PalGameWorldSettings]\nOptionSettings=(" + configItems.join(",") + ")\n";
-	console.log(result);
 	document.getElementById("configText").value = result;
 }
 
-function adjustWritebackValue(value) {
-	switch (value) {
-		case 'on':
-			return 'True';
-		case 'off':
-			return 'False';
+function adjustWritebackValue(meta, value) {
+	switch (meta.type) {
+		case 'bool':
+			return (value=="on") ? "True" : "False";
+		case 'string':
+			return '"' + value + '"';
 		default:
 			return value;
 	}
