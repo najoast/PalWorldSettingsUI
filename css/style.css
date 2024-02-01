@@ -5,9 +5,6 @@ body {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-}
-
-body {
 	position: relative;
 }
 
@@ -22,7 +19,7 @@ body::before {
 	background-image: url("../img/bg.avif");
 	background-repeat: no-repeat;
 	background-size: cover;
-	filter: blur(10px) brightness(0.7);
+	filter: blur(10px) brightness(0.6);
 }
 
 h1 {
@@ -43,8 +40,8 @@ textarea {
 }
 
 input[type="button"] {
-	background-color: #4CAF50;
-	color: white;
+	background-color: white;
+	color: black;
 	padding: 10px 20px;
 	border: none;
 	border-radius: 4px;
@@ -52,7 +49,7 @@ input[type="button"] {
 }
 
 input[type="button"]:hover {
-	background-color: #45a049;
+	background-color: #dededa;
 }
 
 h2 {
@@ -81,12 +78,12 @@ table th {
 }
 
 table tr {
-	background-color: rgba(0, 0, 0, 0.6);
+	background-color: rgba(0, 0, 0, 0.7);
 	margin-bottom: 2px;
 }
 
 table tr:hover {
-	background-color: rgba(19, 196, 241, 0.5);
+	background-color: rgba(19, 196, 241, 0.7);
 }
 
 table tr:hover td,
@@ -120,6 +117,7 @@ td:nth-child(2) {
 	text-align: center;
 }
 
+/* textarea */
 #configText {
 	width: 100%;
 	height: 150px;
@@ -129,4 +127,17 @@ td:nth-child(2) {
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 	background-color: rgba(0, 0, 0, 0.5);
 	color: white;
+}
+
+/* float button */
+.container {
+	position: relative;
+	height: 1000px; /* 假设有足够的高度以产生滚动条 */
+}
+
+.float-button {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	z-index: 9999;
 }

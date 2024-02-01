@@ -212,6 +212,23 @@ function adjustWritebackValue(value) {
 		case 'off':
 			return 'False';
 		default:
-				return value;
+			return value;
 	}
+}
+
+function copyResult() {
+	var copyText = document.getElementById("configText");
+	copyText.select();
+	copyText.setSelectionRange(0, 99999); /* For mobile devices */
+	document.execCommand("copy");
+
+	var button = document.getElementById("copyResult");
+	let oldText = button.value;
+	button.value = "已复制";
+	button.disabled = true;
+
+	setTimeout(function() {
+		button.value = oldText;
+		button.disabled = false;
+	}, 1000);
 }
