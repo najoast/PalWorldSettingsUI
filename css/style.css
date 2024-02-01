@@ -1,10 +1,28 @@
 body {
-	font-family: Arial, sans-serif;
+	font-family: sans-serif, Arial;
 	background-color: #f2f2f2;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+}
+
+body {
+	position: relative;
+}
+
+body::before {
+	content: "";
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	background-image: url("../img/bg.avif");
+	background-repeat: no-repeat;
+	background-size: cover;
+	filter: blur(10px) brightness(0.7);
 }
 
 h1 {
@@ -16,6 +34,7 @@ form {
 }
 
 textarea {
+	font-family: sans-serif;
 	width: 100%;
 	padding: 10px;
 	border: 1px solid #ccc;
@@ -47,4 +66,68 @@ label {
 input[type="range"] {
 	width: 300px;
 	margin-right: 10px;
+}
+
+/* table */
+table {
+  border-collapse: collapse;
+	font-family: Simhei, Arial, sans-serif;
+}
+
+table td,
+table th {
+  padding: 10px;
+  color: white;
+  /* text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black; */
+}
+
+table tr {
+  background-color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 2px;
+}
+
+table tr:hover {
+  background-color: rgba(19, 196, 241, 0.5);
+}
+
+table tr:hover td,
+table tr:hover th {
+  position: relative;
+}
+
+table tr:hover td::before,
+table tr:hover th::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 2px solid rgba(19, 196, 241, 0.8);
+  z-index: -1;
+  animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(19, 196, 241, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(19, 196, 241, 0.8);
+  }
+}
+
+td:nth-child(2) {
+  text-align: center;
+}
+
+#configText {
+	width: 100%;
+	height: 150px;
+	padding: 10px;
+	border: 1px solid gray;
+	border-radius: 5px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+	background-color: rgba(0, 0, 0, 0.5);
+	color: white;
 }

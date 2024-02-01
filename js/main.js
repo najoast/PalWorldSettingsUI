@@ -76,7 +76,7 @@ function renderWithoutMeta(configItem, row) {
 		input.value = configItem.value;
 
 		valueLabel = document.createElement("label");
-		valueLabel.innerHTML = configItem.value;
+		valueLabel.innerHTML = formatFloatValue(configItem.value);
 		labelCell.appendChild(valueLabel);
 
 		input.oninput = function() {
@@ -109,7 +109,7 @@ function renderWithMeta(configItem ,meta, row) {
 			input.step = meta.step;
 			input.value = configItem.value;
 			valueLabel = document.createElement("label");
-			valueLabel.innerHTML = parseFloat(configItem.value).toFixed(1);
+			valueLabel.innerHTML = formatFloatValue(configItem.value);
 			input.oninput = function() {
 				updateConfigValue(input, valueLabel);
 			};
@@ -133,6 +133,7 @@ function renderWithMeta(configItem ,meta, row) {
 		case "string":
 			input = document.createElement("input");
 			input.type = "text";
+			input.style.width = "280px";
 			input.value = trimString(configItem.value, '"');
 			break;
 		default:
@@ -146,7 +147,6 @@ function renderWithMeta(configItem ,meta, row) {
 	}
 	if (valueLabel) {
 		labelCell.appendChild(valueLabel);
-		// valueCell.appendChild(valueLabel);
 	}
 	row.appendChild(valueCell);
 }
@@ -159,7 +159,6 @@ function renderSetting(configItem, metaMap, table) {
 	} else {
 		renderWithMeta(configItem ,meta, row);
 	}
-	// parent.appendChild(document.createElement("br"));
 	table.appendChild(row);
 }
 

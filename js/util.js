@@ -31,3 +31,9 @@ function trimString(str, char) {
 	}
 	return str;
 }
+
+function formatFloatValue(str) {
+	const floatValue = parseFloat(str);
+	const formattedValue = floatValue % 1 === 0 ? floatValue.toFixed(0) : floatValue.toFixed(1);
+	return formattedValue;
+}

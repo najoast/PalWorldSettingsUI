@@ -65,4 +65,3 @@ function getMetaMap() {
 	const rows = parseCSV(_settingsMeta);
 	return new Map(rows.map(obj => [obj.key, obj]));
 }
-
