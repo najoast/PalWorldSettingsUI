@@ -133,7 +133,7 @@ function renderWithMeta(configItem ,meta, row) {
 		case "bool":
 			input = document.createElement("input");
 			input.type = "checkbox";
-			input.checkd = (configItem.value == "True");
+			input.checked = (configItem.value == "True");
 			input.onchange = updateConfigText;
 			break;
 		case "string":
@@ -193,23 +193,23 @@ function updateConfigText() {
 	var rows = table.rows;
 	for (var i = 0; i < rows.length; i++) {
 		var key = rows[i].cells[0].dataset.key;
-		var value = rows[i].cells[2].children[0].value;
+		let valueElement = rows[i].cells[2].children[0];
 		const meta = _metaMap.get(key);
-		configItems.push(key + "=" + adjustWritebackValue(meta, value));
+		configItems.push(key + "=" + adjustWritebackValue(meta, valueElement));
 	}
 
 	var result = "[/Script/Pal.PalGameWorldSettings]\nOptionSettings=(" + configItems.join(",") + ")\n";
 	document.getElementById("configText").value = result;
 }
 
-function adjustWritebackValue(meta, value) {
+function adjustWritebackValue(meta, valueElement) {
 	switch (meta.type) {
 		case 'bool':
-			return (value=="on") ? "True" : "False";
+			return valueElement.checked ? "True" : "False";
 		case 'string':
-			return '"' + value + '"';
+			return '"' + valueElement.value + '"';
 		default:
-			return value;
+			return valueElement.value;
 	}
 }
 
