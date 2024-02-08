@@ -141,3 +141,12 @@ td:nth-child(2) {
 	bottom: 20px;
 	z-index: 9999;
 }
+
+/* select */
+select {
+	background-color: #f1f1f1;
+	border: 1px solid #ccc;
+	padding: 5px;
+	font-size: 14px;
+	color: #333;
+}
