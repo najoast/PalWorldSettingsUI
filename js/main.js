@@ -112,7 +112,7 @@ function renderWithMeta(configItem ,meta, row) {
 			valueLabel.innerHTML = formatFloatValue(configItem.value);
 			input.oninput = function() {
 				updateConfigValue(input, valueLabel);
-				updateConfigText();
+				onSettingChanged();
 			};
 			break;
 		case "select":
@@ -128,20 +128,27 @@ function renderWithMeta(configItem ,meta, row) {
 					select.selectedIndex = i;
 				}
 			}
-			select.onchange = updateConfigText;
+			if (configItem.key == "Difficulty") {
+				select.onchange = function() {
+					changeDifficulty(this.value);
+					onSettingChanged();
+				}
+			} else {
+				select.onchange = onSettingChanged;
+			}
 			break;
 		case "bool":
 			input = document.createElement("input");
 			input.type = "checkbox";
 			input.checked = (configItem.value == "True");
-			input.onchange = updateConfigText;
+			input.onchange = onSettingChanged;
 			break;
 		case "string":
 			input = document.createElement("input");
 			input.type = "text";
 			input.style.width = "280px";
 			input.value = trimString(configItem.value, '"');
-			input.onchange = updateConfigText;
+			input.onchange = onSettingChanged;
 			break;
 		default:
 			console.log("Unsupported setting type! " + meta);
@@ -192,14 +199,18 @@ function updateConfigText() {
 	var table = configItemsDiv.getElementsByTagName("table")[0];
 	var rows = table.rows;
 	for (var i = 0; i < rows.length; i++) {
-		var key = rows[i].cells[0].dataset.key;
-		let valueElement = rows[i].cells[2].children[0];
+		const key = rows[i].cells[0].dataset.key;
+		const valueElement = rows[i].cells[2].children[0];
 		const meta = _metaMap.get(key);
 		configItems.push(key + "=" + adjustWritebackValue(meta, valueElement));
 	}
 
 	var result = "[/Script/Pal.PalGameWorldSettings]\nOptionSettings=(" + configItems.join(",") + ")\n";
 	document.getElementById("configText").value = result;
+}
+
+function onSettingChanged() {
+	updateConfigText();
 }
 
 function adjustWritebackValue(meta, valueElement) {
@@ -228,4 +239,42 @@ function copyResult() {
 		button.value = oldText;
 		button.disabled = false;
 	}, 1000);
+}
+
+function changeDifficulty(difficulty) {
+	const preset = getPreset(difficulty);
+	if (!preset) {
+		console.error("Difficulty not found: " + difficulty);
+		return;
+	}
+	// Traverse preset values
+	var configItemsDiv = document.getElementById("configItems");
+	var table = configItemsDiv.getElementsByTagName("table")[0];
+	var rows = table.rows;
+	for (var i = 0; i < rows.length; i++) {
+		const key = rows[i].cells[0].dataset.key;
+		const presetValue = preset.get(key);
+		if (presetValue) {
+			const labelElement = rows[i].cells[1].children[0];
+			const valueElement = rows[i].cells[2].children[0];
+			const meta = _metaMap.get(key);
+			switch (meta.type) {
+				case "range":
+					valueElement.value = presetValue;
+					updateConfigValue(valueElement, labelElement);
+					break;
+				case "string":
+					valueElement.value = presetValue;
+					break;
+				case "select":
+					valueElement.selectedIndex = presetValue;
+					break;
+				case "bool":
+					valueElement.checked = presetValue;
+					break;
+				default:
+					console.error("Unsupported type in preset value:" + meta);
+			}
+		}
+	}
 }

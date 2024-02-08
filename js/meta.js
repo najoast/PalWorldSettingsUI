@@ -63,9 +63,9 @@ bUseAuth,是否使用身份验证,,bool,,,,TRUE,1
 BanListURL,封禁名单URL,,string,,,,https://api.palworldgame.com/api/banlist.txt,1`;
 
 function getMetaMap() {
-	console.log("getMetaMap");
+	// console.log("getMetaMap");
 	const rows = parseCSV(_settingsMeta);
-	return new Map(rows.map(obj => [obj.key, obj]));
+	return new Map(rows.map(row => [row.key, row]));
 }
 
 const _metaMap = getMetaMap();
