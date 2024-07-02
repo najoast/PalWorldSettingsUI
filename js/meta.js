@@ -60,7 +60,13 @@ RCONEnabled,启用远程控制台,启用或禁用远程控制台 (RCON) 以进�
 RCONPort,远程控制台端口,,range,1024,49151,1,25575,1
 Region,服务器所在区域,,string,,,,,1
 bUseAuth,是否使用身份验证,,bool,,,,TRUE,1
-BanListURL,封禁名单URL,,string,,,,https://api.palworldgame.com/api/banlist.txt,1`;
+BanListURL,封禁名单URL,,string,,,,https://api.palworldgame.com/api/banlist.txt,1
+RESTAPIEnabled,是否开启 RESTful API,,bool,,,,FALSE,1
+RESTAPIPort,RESTful API 端口,,range,1024,49151,1,8212,1
+bShowPlayerList,是否显示玩家列表,,bool,,,,FALSE,1
+AllowConnectPlatform,允许连接平台,允许哪个平台的玩家连接到服务器,select,Steam;Xbox,Steam;Xbox,,Steam,1
+bIsUseBackupSaveData,是否打开世界备份,打开后硬盘占用会变高,bool,,,,TRUE,1
+LogFormatType,日志格式,,select,Text;Json,Text;Json,,Text,1`;
 
 function getMetaMap() {
 	// console.log("getMetaMap");
