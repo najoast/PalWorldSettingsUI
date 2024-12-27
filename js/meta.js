@@ -38,8 +38,10 @@ DropItemAliveMaxHours,掉落物品存活时间（小时）,,range,1,10,1,1,1
 bAutoResetGuildNoOnlinePlayers,无在线玩家时是否自动重置公会,,bool,,,,FALSE,1
 AutoResetGuildTimeNoOnlinePlayers,无在线玩家多少小时后自动重置公会,,range,1,300,1,72,1
 GuildPlayerMaxNum,公会人数上限,,range,1,100,1,20,0
+BaseCampMaxNumInGuild,公会内据点数量上限,,range,1,20,1,4,1
 PalEggDefaultHatchingTime,帕鲁蛋孵化所需时间（小时）,,range,0,240,1,72,0
 WorkSpeedRate,工作速度倍率,,range,0.1,5,0.1,1,1
+AutoSaveSpan,自动保存间隔,,range,1,60,1,30,1
 bIsMultiplay,是否是多人游戏,,bool,,,,FALSE,0
 bIsPvP,是否开启PVP模式,,bool,,,,FALSE,1
 bCanPickupOtherGuildDeathPenaltyDrop,是否可以拾取其他公会成员的死亡掉落,,bool,,,,FALSE,1
@@ -48,6 +50,7 @@ bEnableFastTravel,是否开启传送功能,,bool,,,,TRUE,1
 bIsStartLocationSelectByMap,启用地图上起始位置选择,,bool,,,,TRUE,1
 bExistPlayerAfterLogout,玩家下线后是否仍存在于游戏中,,bool,,,,FALSE,1
 bEnableDefenseOtherGuildPlayer,启用公会玩家互相防御?,可能是：允许公会玩家互相防御：这个选项启用时，公会成员可以相互进行防御，保护彼此免受其他公会或敌对玩家的攻击。这可能涉及公会内部的团队合作和互助，使公会成员能够共同面对敌对势力。,bool,,,,FALSE,1
+bInvisibleOtherGuildBaseCampAreaFX,是否允许公会成员看到其他公会的据点区域效果?,是否允许公会成员看到其他公会的据点区域效果，如果启用，则公会成员可以看到其他公会的据点区域效果。,bool,,,,FALSE,1
 CoopPlayerMaxNum,主机模式玩家数量上限,,range,1,32,1,4,1
 ServerPlayerMaxNum,专用服务器玩家数量上限,,range,1,32,1,32,1
 ServerName,服务器名字,,string,,,,Default Palworld Server,1
@@ -66,7 +69,8 @@ RESTAPIPort,RESTful API 端口,,range,1024,49151,1,8212,1
 bShowPlayerList,是否显示玩家列表,,bool,,,,FALSE,1
 AllowConnectPlatform,允许连接平台,允许哪个平台的玩家连接到服务器,select,Steam;Xbox,Steam;Xbox,,Steam,1
 bIsUseBackupSaveData,是否打开世界备份,打开后硬盘占用会变高,bool,,,,TRUE,1
-LogFormatType,日志格式,,select,Text;Json,Text;Json,,Text,1`;
+LogFormatType,日志格式,,select,Text;Json,Text;Json,,Text,1
+SupplyDropSpan,补给掉落间隔,,range,1,500,1,180,1`;
 
 function getMetaMap() {
 	// console.log("getMetaMap");
