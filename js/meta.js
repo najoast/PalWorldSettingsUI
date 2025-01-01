@@ -1,5 +1,7 @@
 const _settingsMeta =`key,name,desc,type,min,max,step,default,server_only
 Difficulty,难度,,select,Casual;Normal;Hard;None,休闲;普通;困难;自定义,,,0
+RandomizerType,是否开启帕鲁随机分布,,select,None;Region;All,不随机;区域随机;全部随机,,None,1
+RandomizerSeed,随机种子(同个种子会有相同随机序列),是一个20位格式为（0-9A-F）的16进制字符串,string,,,,,1
 DayTimeSpeedRate,白天流逝速度,,range,0.1,5,0.1,1,0
 NightTimeSpeedRate,夜晚流逝速度,,range,0.1,5,0.1,1,0
 ExpRate,经验值倍率,,range,0.1,20,0.1,1,0
@@ -17,6 +19,7 @@ PalStomachDecreaceRate,帕鲁饱食度降低倍率,,range,0.1,5,0.1,1,0
 PalStaminaDecreaceRate,帕鲁耐力降低倍率,,range,0.1,5,0.1,1,0
 PalAutoHPRegeneRate,帕鲁生命值自然回复倍率,,range,0.1,5,0.1,1,0
 PalAutoHpRegeneRateInSleep,帕鲁睡眠时生命值回复倍率,帕鲁终端中的生命值回复倍率,range,0.1,5,0.1,1,0
+BuildObjectHpRate,建筑生命值倍率,,range,0.5,10,0.1,1,1
 BuildObjectDamageRate,对建筑伤害倍率,,range,0.5,3,0.1,1,0
 BuildObjectDeteriorationDamageRate,建筑特的劣化速度倍率,,range,0,10,0.1,1,0
 CollectionDropRate,可采集物品采集量倍率,,range,0.5,3,0.1,1,0
@@ -44,6 +47,8 @@ WorkSpeedRate,工作速度倍率,,range,0.1,5,0.1,1,1
 AutoSaveSpan,自动保存间隔,,range,1,60,1,30,1
 bIsMultiplay,是否是多人游戏,,bool,,,,FALSE,0
 bIsPvP,是否开启PVP模式,,bool,,,,FALSE,1
+bHardcore,是否开启硬核模式(此模式玩家死亡后不会复活),,bool,,,,FALSE,1
+bPalLost,是否开启帕鲁永久死亡(此模式帕鲁死亡后不会复活),,bool,,,,FALSE,1
 bCanPickupOtherGuildDeathPenaltyDrop,是否可以拾取其他公会成员的死亡掉落,,bool,,,,FALSE,1
 bEnableNonLoginPenalty,是否开启离线惩罚,如果开启下线后饥饿度会随着时间的流逝而增加，就像在线时一样。,bool,,,,TRUE,1
 bEnableFastTravel,是否开启传送功能,,bool,,,,TRUE,1
@@ -51,6 +56,8 @@ bIsStartLocationSelectByMap,启用地图上起始位置选择,,bool,,,,TRUE,1
 bExistPlayerAfterLogout,玩家下线后是否仍存在于游戏中,,bool,,,,FALSE,1
 bEnableDefenseOtherGuildPlayer,启用公会玩家互相防御?,可能是：允许公会玩家互相防御：这个选项启用时，公会成员可以相互进行防御，保护彼此免受其他公会或敌对玩家的攻击。这可能涉及公会内部的团队合作和互助，使公会成员能够共同面对敌对势力。,bool,,,,FALSE,1
 bInvisibleOtherGuildBaseCampAreaFX,是否允许公会成员看到其他公会的据点区域效果?,是否允许公会成员看到其他公会的据点区域效果，如果启用，则公会成员可以看到其他公会的据点区域效果。,bool,,,,FALSE,1
+bBuildAreaLimit,禁止在传送点等结构附近建造建筑物,,bool,,,,FALSE,1
+ItemWeightRate,物品重量倍率,,range,0.1,10,0.1,1,1
 CoopPlayerMaxNum,主机模式玩家数量上限,,range,1,32,1,4,1
 ServerPlayerMaxNum,专用服务器玩家数量上限,,range,1,32,1,32,1
 ServerName,服务器名字,,string,,,,Default Palworld Server,1
@@ -67,10 +74,14 @@ BanListURL,封禁名单URL,,string,,,,https://api.palworldgame.com/api/banlist.t
 RESTAPIEnabled,是否开启 RESTful API,,bool,,,,FALSE,1
 RESTAPIPort,RESTful API 端口,,range,1024,49151,1,8212,1
 bShowPlayerList,是否显示玩家列表,,bool,,,,FALSE,1
+ChatPostLimitPerMinute,每分钟发送聊天消息数量上限,,range,1,500,1,10,1
 AllowConnectPlatform,允许连接平台,允许哪个平台的玩家连接到服务器,select,Steam;Xbox,Steam;Xbox,,Steam,1
 bIsUseBackupSaveData,是否打开世界备份,打开后硬盘占用会变高,bool,,,,TRUE,1
 LogFormatType,日志格式,,select,Text;Json,Text;Json,,Text,1
-SupplyDropSpan,补给掉落间隔,,range,1,500,1,180,1`;
+SupplyDropSpan,补给掉落间隔,,range,1,500,1,180,1
+EnablePredatorBossPal,是否开启狂暴boss,,bool,,,,FALSE,1
+MaxBuildingLimitNum,每个玩家的建筑数量限制（0=无限制）,,string,,,,0,1
+ServerReplicatePawnCullDistance,服务器同步帕鲁的距离(cm),,range,5000,15000,1,15000,1`;
 
 function getMetaMap() {
 	// console.log("getMetaMap");
